@@ -27,8 +27,11 @@
   - name: Apply sysctl settings
     command: sysctl --system
 
-  - name: Remove /var/lib/dpkg/lock file
-    shell: rm -rf /var/lib/dpkg/lock*
+  - name: Remove stale lock files
+    shell: |
+      if [ -f /var/lib/dpkg/lock ] || [ -f /var/lib/dpkg/lock-frontend ]; then
+        rm -f /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend
+      fi
 
   - name: Update package index and install required packages
     apt:
@@ -73,6 +76,10 @@
       - docker-buildx-plugin
       - docker-compose-plugin
       state: present
+    retries: 5
+    delay: 10
+    register: docker_install
+    until: docker_install is succeeded
 
   - name: Add user to docker group
     user:

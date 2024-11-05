@@ -10,7 +10,7 @@ terraform {
 resource "proxmox_vm_qemu" "k8s-master" {
   name        = "k8s-master"
   target_node = "proxmox"
-  vmid       = 300
+  vmid       = 700
   clone      = "ubuntu-template"
   full_clone = true
 
@@ -62,7 +62,7 @@ resource "proxmox_vm_qemu" "k8s-workers" {
   count       = var.vm_count
   name        = "k8s-worker-${count.index + 1}"
   target_node = "proxmox"
-  vmid        = 301 + count.index
+  vmid        = 701 + count.index
   clone       = "ubuntu-template"
   full_clone  = true
 

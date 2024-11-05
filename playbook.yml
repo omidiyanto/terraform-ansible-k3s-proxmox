@@ -124,13 +124,3 @@
       agent --docker --server https://{{ IP_MASTER_NODE }}:6443
     args:
       executable: /bin/bash
-
-- name: Setup Load Balancer and Ingress Controller
-  hosts: master-node
-  tasks:
-  - name: Copy all yaml file to host
-    copy:
-      src: ./init-yml-file
-      dest: .
-  - name: Apply all yaml files
-    shell: kubectl apply -f ./init-yml-file

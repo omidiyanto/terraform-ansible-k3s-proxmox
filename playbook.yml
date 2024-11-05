@@ -131,4 +131,6 @@
   - name: Copy all yaml file to host
     copy:
       src: ./init-yml-file
-      dest: ./init-yml-file
+      dest: .
+  - name: Apply all yaml files
+    shell: kubectl apply -f ./init-yml-file

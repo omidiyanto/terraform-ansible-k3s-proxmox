@@ -27,6 +27,9 @@
   - name: Apply sysctl settings
     command: sysctl --system
 
+  - name: Remove /var/lib/dpkg/lock file
+    shell: rm -rf /var/lib/dpkg/lock*
+
   - name: Update package index and install required packages
     apt:
       update_cache: yes

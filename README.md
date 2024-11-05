@@ -35,28 +35,20 @@ ssh YOUR_CLOUDINIT_USER@IP_ADDR_MASTER_NODE
 git clone https://github.com/omidiyanto/terraform-ansible-k3s-proxmox.git
 cd terraform-ansible-k3s-proxmox
 ```
-2. Set 'true' for 'strictARP' value on kube-proxy
-```bash
-kubectl edit configmap -n kube-system kube-proxy
-```
-should be like this:
-```bash
-strictARP: true
-```
-3. Install MetalLB by manifest
+2. Install MetalLB by manifest
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
 ```
-4. Change IP Address Pool range
+3. Change IP Address Pool range
 ```bash
 vim ipaddresspool.yml
 ```
-5. Apply IP Address Pool and L2advertisement
+4. Apply IP Address Pool and L2advertisement
 ```bash
 kubectl apply -f ipaddresspool.yml
 kubectl apply -f L2advertisement.yml
 ```
-6. Install HAproxy as Ingress Controller by manifest
+5. Install HAproxy as Ingress Controller by manifest
 ```bash
 kubectl apply -f haproxy-ingress-controller.yml
 ```

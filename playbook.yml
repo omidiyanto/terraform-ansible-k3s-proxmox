@@ -102,7 +102,7 @@
   - name: Initialize control/master node
     shell: curl -sfL https://get.k3s.io | K3S_TOKEN=kubernetes@omidiyanto sh -s -
       server --disable traefik --disable serverlb --disable local-storage
-      --docker --write-kubeconfig-mode --write-config 644
+      --docker --write-kubeconfig-mode=644
     args:
       executable: /bin/bash
 

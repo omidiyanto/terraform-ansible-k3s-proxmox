@@ -27,17 +27,9 @@
   - name: Apply sysctl settings
     command: sysctl --system
 
-  - name: Remove stale lock files
-    shell: |
-      if [ -f /var/lib/dpkg/lock ] || [ -f /var/lib/dpkg/lock-frontend ]; then
-        rm -f /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend
-      fi
-
-  - name: Update repository
-    shell: apt update
-
   - name: Update package index and install required packages
     apt:
+      update_cache: yes
       name:
       - ca-certificates
       - curl
@@ -60,6 +52,10 @@
     command: dpkg --print-architecture
     register: dpkg_arch
 
+  - name: Remove stale lock files
+    shell: rm -rf /var/lib/apt/lists/lock;rm -rf /var/cache/apt/archives/lock;rm -rf
+      /var/lib/dpkg/lock*
+
   - name: Add Docker repository
     apt_repository:
       repo: "deb [arch={{ dpkg_arch.stdout }} signed-by=/etc/apt/keyrings/docker.asc]
@@ -68,11 +64,13 @@
       filename: docker
       state: present
 
-  - name: Update repository
-    shell: apt update
+  - name: Remove stale lock files
+    shell: rm -rf /var/lib/apt/lists/lock;rm -rf /var/cache/apt/archives/lock;rm -rf
+      /var/lib/dpkg/lock*
 
   - name: Install Docker and Containerd
     apt:
+      update_cache: yes
       name:
       - docker-ce
       - docker-ce-cli

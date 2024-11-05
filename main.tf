@@ -7,8 +7,8 @@ terraform {
   }
 }
 
-resource "proxmox_vm_qemu" "k8s-master" {
-  name        = "k8s-master"
+resource "proxmox_vm_qemu" "k3s-master" {
+  name        = "k3s-master"
   target_node = "proxmox"
   vmid       = 700
   clone      = "ubuntu-template"
@@ -58,9 +58,9 @@ resource "proxmox_vm_qemu" "k8s-master" {
   }
 }
 
-resource "proxmox_vm_qemu" "k8s-workers" {
+resource "proxmox_vm_qemu" "k3s-workers" {
   count       = var.vm_count
-  name        = "k8s-worker-${count.index + 1}"
+  name        = "k3s-worker-${count.index + 1}"
   target_node = "proxmox"
   vmid        = 701 + count.index
   clone       = "ubuntu-template"
@@ -113,11 +113,11 @@ resource "proxmox_vm_qemu" "k8s-workers" {
 output "vm_info" {
   value = {
     master = {
-      hostname = proxmox_vm_qemu.k8s-master.name
-      ip_addr  = proxmox_vm_qemu.k8s-master.default_ipv4_address
+      hostname = proxmox_vm_qemu.k3s-master.name
+      ip_addr  = proxmox_vm_qemu.k3s-master.default_ipv4_address
     },
     workers = [
-      for vm in proxmox_vm_qemu.k8s-workers : {
+      for vm in proxmox_vm_qemu.k3s-workers : {
         hostname = vm.name
         ip_addr  = vm.default_ipv4_address
       }
@@ -127,16 +127,16 @@ output "vm_info" {
 
 resource "local_file" "create_ansible_inventory" {
   depends_on = [
-    proxmox_vm_qemu.k8s-master,
-    proxmox_vm_qemu.k8s-workers
+    proxmox_vm_qemu.k3s-master,
+    proxmox_vm_qemu.k3s-workers
   ]
 
   content = <<EOT
 [master-node]
-${proxmox_vm_qemu.k8s-master.default_ipv4_address}
+${proxmox_vm_qemu.k3s-master.default_ipv4_address}
 
 [worker-node]
-${join("\n", [for worker in proxmox_vm_qemu.k8s-workers : worker.default_ipv4_address])}
+${join("\n", [for worker in proxmox_vm_qemu.k3s-workers : worker.default_ipv4_address])}
 EOT
 
   filename = "./inventory.ini"
@@ -146,6 +146,6 @@ EOT
 resource "null_resource" "ansible_playbook" {
     depends_on = [local_file.create_ansible_inventory]
     provisioner "local-exec" {
-        command = "sleep 60;ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./inventory.ini playbook-create-k8s-cluster.yml -u ${var.ci_user}"
+        command = "sleep 60;ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./inventory.ini playbook-create-k3s-cluster.yml -u ${var.ci_user}"
     }
 }

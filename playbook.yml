@@ -33,9 +33,11 @@
         rm -f /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend
       fi
 
+  - name: Update repository
+    shell: apt update
+
   - name: Update package index and install required packages
     apt:
-      update_cache: yes
       name:
       - ca-certificates
       - curl
@@ -66,9 +68,11 @@
       filename: docker
       state: present
 
+  - name: Update repository
+    shell: apt update
+
   - name: Install Docker and Containerd
     apt:
-      update_cache: yes
       name:
       - docker-ce
       - docker-ce-cli

@@ -1,5 +1,33 @@
 # Terraform + Ansible to Provision K3S Cluster on Proxmox Automatically
-## Steps
+<div align="center">
+    <!-- Your badges here -->
+    <img src="https://img.shields.io/badge/kubernetes-blue?style=for-the-badge&logo=kubernetes&logoColor=white">
+    <img src="https://img.shields.io/badge/terraform-%238511FA.svg?style=for-the-badge&logo=terraform&logoColor=white">
+    <img src="https://img.shields.io/badge/ansible-%23000.svg?style=for-the-badge&logo=ansible&logoColor=white">
+    <img src="https://img.shields.io/badge/proxmox-%23FF6F00.svg?style=for-the-badge&logo=proxmox&logoColor=white">
+    <img src="https://img.shields.io/badge/ubuntu-%23D00000.svg?style=for-the-badge&logo=ubuntu&logoColor=white">
+</div>
+<br>
+Welcome to the <b>K3S Lightweight Kubernetes Cluster Automation on Proxmox VE with Terraform and Ansible</b> project! This repository is designed to help you effortlessly set up a robust Kubernetes (K3S) cluster using Terraform and Ansible. If you're looking to streamline your K3S deployment process on Proxmox Virtual Environment, you’re in the right place!
+
+# 📖 Project Overview
+<img src=https://github.com/user-attachments/assets/cbe22844-e705-4e43-ad32-2540c02dcbd7>
+In this project, you will find a comprehensive solution for automating the creation of a Kubernetes (K3S) cluster that consists of one master node and two worker nodes. By leveraging Infrastructure as Code (IaC) and configuration management tools, you can set up a scalable environment for deploying your containerized applications with minimal effort.
+
+### 🚀 Key Features
+- **Terraform**: Utilize Terraform for provisioning and managing the Proxmox virtual machines, enabling consistent and repeatable deployments.
+- **Ansible**: Use Ansible playbooks to automate the installation and configuration of Kubernetes components, ensuring a smooth and efficient setup process.
+- **K3S**: Deploy a Lightweight kubernetes cluster ready for your containerized applications.
+
+### Prerequisites
+Before you begin, ensure you have the following set up:
+
+- A running **Proxmox VE** environment.
+- **Terraform** and **Ansible** installed on proxmox machine.
+- Pre-configured VM Template with cloud-init.
+- Proxmox API token ID and secret
+
+### Steps
 0. Clone this repository
 ```bash
 git clone https://github.com/omidiyanto/terraform-ansible-k3s-proxmox.git

@@ -96,3 +96,29 @@
     systemd:
       name: containerd
       state: restarted
+
+- name: Setup Control Plane
+  hosts: master-node
+  tasks:
+  - name: Initialize control/master node
+    shell: curl -sfL https://get.k3s.io | K3S_TOKEN=kubernetes@omidiyanto sh -s -
+      server --disable traefik --disable serverlb --disable local-storage
+      --docker --write-kubeconfig-mode --write-config 644
+    args:
+      executable: /bin/bash
+
+- name: Setup Workers
+  hosts: worker-node
+  tasks:
+  - name: Gathering Master-Node IP Address
+    set_fact:
+      IP_MASTER_NODE: "{{ groups['master-node'][0] }}"
+    delegate_to: master-node
+  - name: Display IP Address of Maste Node
+    debug:
+      msg: "IP Address of Master-Node is {{ IP_MASTER_NODE }}"
+  - name: Initialize workers-node
+    shell: curl -sfL https://get.k3s.io | K3S_TOKEN=kubernetes@omidiyanto sh -s -
+      agent --docker --server https://{{ IP_MASTER_NODE }}:6443
+    args:
+      executable: /bin/bash

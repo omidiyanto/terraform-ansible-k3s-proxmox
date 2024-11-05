@@ -33,7 +33,6 @@
       name:
       - ca-certificates
       - curl
-      - apt-transport-https
       - gpg
       state: present
 
